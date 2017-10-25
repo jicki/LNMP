@@ -1,0 +1,56 @@
+version: '2'
+services:
+  mysql:
+    image: mysql:5.7
+    hostname: mysql
+    container_name: mysql
+    restart: always
+    volumes:
+    - ./data/mysql:/var/lib/mysql
+    environment:
+    - MYSQL_ROOT_PASSWORD=123456789
+  nginx-php-fpm:
+    image: richarvey/nginx-php-fpm
+    hostname: nginx-php
+    container_name: nginx-php
+    restart: always
+    ports:
+    - "88:80"
+    - "89:8080"
+    volumes:
+    - ./data/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+    - ./data/nginx/conf/conf.d:/etc/nginx/sites-enabled
+    - ./data/nginx/htdocs:/var/www/html
+    depends_on:
+      - mysql
+  svn:
+    image: garethflowers/svn-server
+    hostname: svn
+    container_name: svn
+    restart: always
+    ports:
+    - 8888:3690
+    volumes:
+    - ./data/svn:/var/opt/svn
+  gogs:
+    image: gogs/gogs
+    hostname: gogs
+    container_name: gogs
+    restart: always
+    ports:
+    - "10022:22"
+    - "888:3000"
+    volumes:
+    - ./data/gogs:/data
+    depends_on:
+      - mysql
+  nexus:
+    image: sonatype/nexus
+    hostname: nexus
+    container_name: nexus
+    restart: always
+    ports:
+    - 889:8081
+    volumes:
+    # chown -R 200:200 /opt/data/nexus
+    - ./data/nexus:/sonatype-work
