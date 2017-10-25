@@ -53,5 +53,5 @@ services:
     ports:
     - 889:8081
     volumes:
-    # chown -R 200:200 /opt/data/nexus
+    # chown -R 200:200 ./data/nexus
     - ./data/nexus:/sonatype-work
