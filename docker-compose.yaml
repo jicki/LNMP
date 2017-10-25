@@ -32,6 +32,7 @@ services:
     - 8888:3690
     volumes:
     - ./data/svn:/var/opt/svn
+    # docker exec -it svn svnadmin create new-repo
   gogs:
     image: gogs/gogs
     hostname: gogs
