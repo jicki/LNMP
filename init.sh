@@ -7,5 +7,5 @@ mkdir -p ./data/gogs
 mkdir -p ./data/nexus
 
 
-chown -R systemd-bus-proxy:input ./data/mysql
+chown -R 999:999 ./data/mysql
 chown -R 200:200 ./data/nexus
