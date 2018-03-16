@@ -1,7 +1,12 @@
 version: '2'
+networks:
+  app_net:
+    driver: bridge
 services:
   mysql:
     image: mysql:5.7
+    networks:
+      - app_net
     hostname: mysql
     container_name: mysql
     restart: always
@@ -11,6 +16,8 @@ services:
     - MYSQL_ROOT_PASSWORD=123456789
   nginx-php-fpm:
     image: richarvey/nginx-php-fpm
+    networks:
+      - app_net
     hostname: nginx-php
     container_name: nginx-php
     restart: always
@@ -21,10 +28,10 @@ services:
     - ./data/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
     - ./data/nginx/conf/conf.d:/etc/nginx/sites-enabled
     - ./data/nginx/htdocs:/var/www/html
-    depends_on:
-      - mysql
   svn:
     image: garethflowers/svn-server
+    networks:
+      - app_net
     hostname: svn
     container_name: svn
     restart: always
@@ -35,6 +42,8 @@ services:
     # docker exec -it svn svnadmin create new-repo
   gogs:
     image: gogs/gogs
+    networks:
+      - app_net
     hostname: gogs
     container_name: gogs
     restart: always
@@ -43,10 +52,10 @@ services:
     - "888:3000"
     volumes:
     - ./data/gogs:/data
-    depends_on:
-      - mysql
   nexus:
     image: sonatype/nexus
+    networks:
+      - app_net
     hostname: nexus
     container_name: nexus
     restart: always
